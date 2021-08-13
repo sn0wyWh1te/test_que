@@ -159,39 +159,21 @@ void producer()
 
 int main()
 {
+   std::vector<std::thread> vecJoin;
+   vecJoin.reserve(6);
+
    auto start = std::chrono::steady_clock::now();
-   std::thread pro0(producer);
-   std::thread pro1(producer);
-   std::thread pro2(producer);
-   std::thread pro3(producer);
-   std::thread pro4(producer);
-   std::thread pro5(producer);
 
+   for (int i = 0; i < 3; i++)
+      {
+      vecJoin.emplace_back(std::thread (producer));
+      vecJoin.emplace_back(std::thread (consumer));
+      }
 
-
-   std::thread con0(consumer);
-   std::thread con1(consumer);
-   std::thread con2(consumer);
-   std::thread con3(consumer);
-   std::thread con4(consumer);
-   std::thread con5(consumer);
-
-
-   pro0.join();
-   pro1.join();
-   pro2.join();
-   pro3.join();
-   pro4.join();
-   pro5.join();
-
-
-   con0.join();
-   con1.join();
-   con2.join();
-   con3.join();
-   con4.join();
-   con5.join();
-
+   for (int i = 0; i < 6; i++)
+      {
+      vecJoin[i].join();
+      }
 
 
    auto end = std::chrono::steady_clock::now();
